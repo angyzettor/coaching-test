@@ -1,8 +1,14 @@
 import streamlit as st
 import random
 
-# Fonction pour générer une réponse du coach IA avec recommandations pratiques
+# Dictionnaire amélioré pour détecter plus de synonymes et variations
 def coaching_response(user_input):
+    user_input = user_input.lower()
+    
+    stress_keywords = ["stress", "anxiété", "angoisse", "relaxation", "respiration", "calme", "burn-out"]
+    decision_keywords = ["décision", "choix", "hésitation", "réflexion", "incertitude", "dilemme"]
+    leadership_keywords = ["leadership", "manager", "motivation", "équipe", "inspiration", "gestion des équipes", "confiance"]
+    
     responses = {
         "gestion du stress": [
             "Prenez 5 minutes pour respirer profondément et vous recentrer. Exercice : Inspirez 4 secondes, retenez 4 secondes, expirez 4 secondes.",
@@ -20,12 +26,15 @@ def coaching_response(user_input):
             "Pratiquez la délégation : Identifiez une tâche que vous faites actuellement mais qu’un collaborateur pourrait prendre en charge."
         ]
     }
-
-    for key in responses:
-        if key in user_input.lower():
-            return random.choice(responses[key])
-
-    return "Je ne suis pas sûr de comprendre. Pouvez-vous reformuler votre question sur le coaching ?"
+    
+    if any(word in user_input for word in stress_keywords):
+        return random.choice(responses["gestion du stress"])
+    elif any(word in user_input for word in decision_keywords):
+        return random.choice(responses["prise de décision"])
+    elif any(word in user_input for word in leadership_keywords):
+        return random.choice(responses["leadership"])
+    else:
+        return "Je ne suis pas sûr de comprendre. Essayez une question sur le stress, la prise de décision ou le leadership ! 😊"
 
 # Interface Streamlit
 st.title("🤖 Coach IA Personnel et Professionnel")
